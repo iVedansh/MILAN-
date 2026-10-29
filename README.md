@@ -36,7 +36,13 @@ This is a static frontend and does not require a build step or backend. Styles a
 
 ## Demo data
 
-Event content is fictional sample data stored separately from the rendering logic in the `events` array in `index.html`. Registration is a frontend demonstration only; it validates the form and shows a success state but does not send or persist participant data to a server.
+Event content is fictional sample data stored in the `events` array in `assets/js/app.js`. Registration is a frontend demonstration only; it validates the form and shows a success state but does not send or persist participant data to a server.
+
+## Before a real launch
+
+- Replace sample event names, dates, venues and descriptions with the official Milan schedule.
+- Connect the registration form to an approved backend before collecting real participant details. The current form intentionally does not transmit or store personal data.
+- Confirm image usage rights and replace any temporary photography as needed.
 
 ## Notes
 
