@@ -14,7 +14,7 @@ A colourful, responsive frontend for the Milan national-level cultural fest conc
 
 ## Run locally
 
-This is a static frontend and does not require a build step or backend.
+This is a static frontend and does not require a build step or backend. Styles and interactions are organized in `assets/css/styles.css` and `assets/js/app.js`.
 
 1. Clone the repository:
    ```bash
