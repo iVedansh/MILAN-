@@ -118,3 +118,17 @@ button:active,.pill:active,.text-btn:active{transform:scale(.97)}
  .event-card-enter{animation:none}
  .category-card:active{transform:none!important}
 }
+
+
+/* Stronger, tactile navigation and category feedback */
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+.filter{position:relative;overflow:hidden;transition:background .32s ease,color .32s ease,border-color .32s ease,transform .32s cubic-bezier(.2,.8,.2,1),box-shadow .32s ease}
+.filter.active{box-shadow:0 0 0 3px #f4c54225,0 7px 22px #f4c54228;transform:translateY(-2px)}
+.category-card{cursor:pointer;transition:box-shadow .35s ease,filter .35s ease}
+.category-card:active{filter:brightness(1.15)}
+.event-card{backface-visibility:hidden}
+.event-card .event-content{transition:background .3s ease}
+.event-card:hover .event-content{background:#302633}
+.modal-backdrop.show .modal{animation:modal-arrive .48s cubic-bezier(.16,.82,.2,1) both}
+@keyframes modal-arrive{0%{opacity:0;transform:translateY(42px) scale(.94);filter:blur(8px)}70%{opacity:1;transform:translateY(-3px) scale(1.005);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.modal-backdrop.show .modal{animation:none}}
