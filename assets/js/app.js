@@ -83,11 +83,7 @@ document.getElementById("registrationForm").addEventListener("submit",async e=>{
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
 document.querySelectorAll(".modal-backdrop").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModal(m.id)}));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal-backdrop.show").forEach(m=>closeModal(m.id));if(e.key==="Tab"){const modal=document.querySelector(".modal-backdrop.show .modal");if(!modal)return;const items=[...modal.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent!==null);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
-function browseAsGuest(){document.getElementById("authModal").classList.remove("show");document.body.style.overflow="";const note=document.createElement("div");note.className="guest-toast";note.textContent="You're browsing Milan as a guest. Event discovery is open to everyone.";document.body.append(note);setTimeout(()=>note.remove(),4200)}
-document.getElementById("guestBtn").addEventListener("click",browseAsGuest);
-document.getElementById("guestBtnBottom").addEventListener("click",()=>{browseAsGuest();document.getElementById("categories").scrollIntoView({behavior:"smooth"})});
 
-document.getElementById("authGuest").addEventListener("click",browseAsGuest);
 document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("navlinks").classList.toggle("open"));
 document.querySelectorAll(".navlinks a").forEach(a=>a.addEventListener("click",()=>{
  document.getElementById("navlinks").classList.remove("open");
@@ -103,7 +99,7 @@ renderEvents();
 /* Scroll reveals and pointer-based 3D card motion */
 (function enhanceMotion(){
   const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const revealTargets=document.querySelectorAll('.intro > *, .section-head, .category-card, .event-card, .guest-inner > *, .footer-row > *');
+  const revealTargets=document.querySelectorAll('.intro > *, .section-head, .category-card, .event-card, .footer-row > *');
   revealTargets.forEach((el,index)=>{el.classList.add('reveal-item');if(el.classList.contains('category-card'))el.style.transitionDelay=(index%4)*65+'ms'});
   if('IntersectionObserver' in window && !reduceMotion){
     const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
@@ -128,7 +124,7 @@ renderEvents();
 })();
 
 
-/* Milan Supabase integration: public guest browsing, email/password accounts, saved events and registrations. */
+/* Milan Supabase integration: public event discovery, email/password accounts, saved events and registrations. */
 function setAuthMode(mode){
  document.querySelectorAll("[data-auth-mode]").forEach(b=>b.classList.toggle("active",b.dataset.authMode===mode));
  document.getElementById("authNameField").hidden=mode!=="signup";
@@ -193,7 +189,7 @@ async function loadBackendEvents(){
  renderEvents();attachCardMotion();
 }
 async function toggleSavedEvent(eventId,button){
- if(!currentUser){pendingRegistration=false;setAuthMode("signin");document.getElementById("authStatus").textContent="Sign in to save events. You can keep browsing as a guest.";openModal("authModal");return;}
+ if(!currentUser){pendingRegistration=false;setAuthMode("signin");document.getElementById("authStatus").textContent="Sign in to save events and continue with registration.";openModal("authModal");return;}
  const {data:existing,error:readError}=await supabaseClient.from("saved_events").select("event_id").eq("user_id",currentUser.id).eq("event_id",eventId).maybeSingle();
  if(readError){button.textContent="Try again";return;}
  if(existing){const {error}=await supabaseClient.from("saved_events").delete().eq("user_id",currentUser.id).eq("event_id",eventId);if(!error)button.textContent="♡ Save event";}
