@@ -38,9 +38,16 @@ The category names and category descriptions follow the supplied Milan reference
 
 ## Backend and authentication
 
-The current frontend supports guest browsing. The sign-in screen is a placeholder until a dedicated Supabase project is approved and configured. The registration form currently validates locally and does not send or persist personal information.
+The website is connected to a dedicated Supabase project in Mumbai (ap-south-1).
 
-When backend setup is approved, the intended implementation is Supabase Auth (email/password) and a Postgres events/registrations schema with row-level security. Never place a service-role key in browser code; only the publishable key belongs in frontend configuration.
+- Email/password sign-up, sign-in and sign-out through Supabase Auth
+- Public guest browsing of published categories and events
+- Database-backed event categories, event listings, saved events and event-interest registrations
+- Profile creation trigger on new Auth users
+- Row Level Security enabled on all public tables; profile, saved-event and registration rows are scoped to the signed-in user's ID
+- The browser uses the Supabase publishable key only. Never place a service-role key in frontend code.
+
+The frontend reads event data from Supabase. Event names, dates and venues remain sample placeholders until the official Milan schedule is supplied. Email confirmation behavior follows the Supabase Auth project settings.
 
 ## Notes
 
