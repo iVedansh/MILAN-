@@ -109,10 +109,11 @@ function setAuthMode(mode){
 document.getElementById("googleAuth").addEventListener("click",async()=>{
  const status=document.getElementById("authStatus"),button=document.getElementById("googleAuth");
  button.disabled=true;status.textContent="Connecting to Google…";
- const isLocalHost=["localhost","127.0.0.1"].includes(window.location.hostname);
- const redirectTo=isLocalHost?"https://milan-react-fc22.vercel.app/":window.location.origin;
- const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo,queryParams:{prompt:"select_account"}}});
- if(error){status.textContent=error.message;button.disabled=false;}
+ const redirectTo="https://milan-react-fc22.vercel.app/";
+ try{
+  const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo,queryParams:{prompt:"select_account"}}});
+  if(error){status.textContent=error.message;button.disabled=false;}
+ }catch(error){status.textContent=error?.message||"Google sign-in could not start. Please try again.";button.disabled=false;}
 });
 document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>setAuthMode(b.dataset.authMode)));
 document.getElementById("authForm").addEventListener("submit",async e=>{
@@ -170,8 +171,16 @@ async function toggleSavedEvent(eventId,button){
 grid.addEventListener("click",e=>{const save=e.target.closest("[data-save]");if(save){e.stopPropagation();toggleSavedEvent(Number(save.dataset.save),save);}});
 async function initMilanBackend(){
  if(!supabaseClient){document.getElementById("authStatus").textContent="Account service is temporarily unavailable.";return;}
- const {data}=await supabaseClient.auth.getSession();currentUser=data.session?.user||null;updateAuthUI();
- supabaseClient.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;updateAuthUI();});
- await loadBackendEvents();
+ try{
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error)throw error;
+  currentUser=data.session?.user||null;updateAuthUI();
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;updateAuthUI();});
+  await loadBackendEvents();
+ }catch(error){
+  console.error("Milan authentication initialization failed:",error);
+  currentUser=null;updateAuthUI();
+  document.getElementById("authStatus").textContent="We could not restore your sign-in. Please sign in again.";
+ }
 }
 initMilanBackend();
