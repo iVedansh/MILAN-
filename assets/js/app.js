@@ -28,23 +28,38 @@ let activeCategory="All",selectedEvent=null,lastFocusedElement=null;
 let currentUser=null,pendingRegistration=false;
 const supabaseClient=window.supabase?.createClient(window.MILAN_SUPABASE_URL,window.MILAN_SUPABASE_KEY);
 const grid=document.getElementById("eventGrid");
-function renderEvents(){
+function renderEvents(animate=true){
  const term=document.getElementById("searchInput").value.trim().toLowerCase();
  const shown=events.filter(e=>(activeCategory==="All"||e.category===activeCategory)&&[e.title,e.category,e.desc,e.venue].some(v=>v.toLowerCase().includes(term)));
  grid.innerHTML=shown.length?shown.map(e=>'<article class="event-card"><img class="event-img" src="'+categoryImages[e.category]+'" alt="'+e.category+' event artwork" loading="lazy"><div class="event-content"><div class="tag">'+e.category+' · MILAN 26</div><h3>'+e.title+'</h3><p>'+e.desc+'</p><div class="event-meta">◷ '+e.date+'<br>⌖ '+e.venue+'</div><button class="text-btn" data-details="'+e.id+'">Explore event ↗</button><button class="save-event" data-save="'+e.id+'" type="button">♡ Save event</button></div></article>').join(""):'<div class="empty"><strong>No events match that search.</strong><p>Try another keyword or category.</p><button class="pill gold" id="resetSearch">Clear filters</button></div>';
- grid.querySelectorAll(".event-card").forEach((card,index)=>{card.style.setProperty("--card-index",index);card.classList.add("event-card-enter")});
+ attachCardMotion();
+ if(animate&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+  grid.querySelectorAll(".event-card").forEach((card,index)=>card.animate(
+   [{opacity:0,transform:"translate3d(0,34px,0) scale(.96)",filter:"blur(5px)"},{opacity:1,transform:"translate3d(0,0,0) scale(1)",filter:"blur(0)"}],
+   {duration:620,delay:index*85,easing:"cubic-bezier(.18,.72,.22,1)",fill:"both"}
+  ));
+ }
 }
 let categorySwitchTimer;
 function setCategory(category){
  if(category===activeCategory)return;
  activeCategory=category;
  document.querySelectorAll(".filter").forEach(b=>{const active=b.dataset.category===category;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active))});
- grid.classList.add("is-switching");
- clearTimeout(categorySwitchTimer);
- categorySwitchTimer=window.setTimeout(()=>{renderEvents();grid.classList.remove("is-switching")},140);
+ if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){renderEvents(false);return;}
+ grid.animate([{opacity:1,transform:"translateY(0)",filter:"blur(0)"},{opacity:0,transform:"translateY(22px)",filter:"blur(4px)"}],{duration:210,easing:"ease-in",fill:"forwards"}).onfinish=()=>{
+  renderEvents(true);
+  grid.animate([{opacity:0,transform:"translateY(-18px)",filter:"blur(4px)"},{opacity:1,transform:"translateY(0)",filter:"blur(0)"}],{duration:460,easing:"cubic-bezier(.2,.75,.25,1)",fill:"both"});
+ };
 }
 document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-category]");if(b)setCategory(b.dataset.category)});
-document.getElementById("categoryGrid").addEventListener("click",e=>{const card=e.target.closest("[data-category]");if(!card)return;setCategory(card.dataset.category);document.getElementById("events").scrollIntoView({behavior:"smooth"})});
+document.getElementById("categoryGrid").addEventListener("click",e=>{
+ const card=e.target.closest("[data-category]");if(!card)return;
+ if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+  card.animate([{transform:"scale(1)",filter:"brightness(1)"},{transform:"scale(.965)",filter:"brightness(1.18)"},{transform:"scale(1.025)",filter:"brightness(1.06)"},{transform:"scale(1)",filter:"brightness(1)"}],{duration:520,easing:"cubic-bezier(.2,.8,.2,1)"});
+ }
+ setCategory(card.dataset.category);
+ document.getElementById("events").scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+});
 document.getElementById("searchInput").addEventListener("input",renderEvents);
 grid.addEventListener("click",e=>{if(e.target.id==="resetSearch"){document.getElementById("searchInput").value="";setCategory("All");return}const b=e.target.closest("[data-details]");if(b)showDetails(Number(b.dataset.details))});
 function openModal(id){lastFocusedElement=document.activeElement;const modal=document.getElementById(id);modal.classList.add("show");document.body.style.overflow="hidden";modal.querySelector(".close")?.focus()}
@@ -74,7 +89,14 @@ document.getElementById("guestBtnBottom").addEventListener("click",()=>{browseAs
 
 document.getElementById("authGuest").addEventListener("click",browseAsGuest);
 document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("navlinks").classList.toggle("open"));
-document.querySelectorAll(".navlinks a").forEach(a=>a.addEventListener("click",()=>document.getElementById("navlinks").classList.remove("open")));
+document.querySelectorAll(".navlinks a").forEach(a=>a.addEventListener("click",()=>{
+ document.getElementById("navlinks").classList.remove("open");
+ const target=document.querySelector(a.getAttribute("href"));
+ if(target&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+  target.scrollIntoView({behavior:"smooth",block:"start"});
+  target.animate([{filter:"brightness(1)"},{filter:"brightness(1.12)"},{filter:"brightness(1)"}],{duration:850,easing:"ease-out"});
+ }
+}));
 renderEvents();
 
 
