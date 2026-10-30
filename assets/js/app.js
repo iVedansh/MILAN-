@@ -124,6 +124,69 @@ renderEvents();
 })();
 
 
+
+
+/* Milan motion suite: cinematic hero, pointer spotlight, magnetic controls and scroll progress. */
+(function milanMotionSuite(){
+ const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const finePointer=window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+ const hero=document.querySelector(".hero");
+ const progress=document.createElement("div");
+ progress.className="scroll-progress";
+ progress.setAttribute("aria-hidden","true");
+ document.body.append(progress);
+ let scrollQueued=false;
+ const updateProgress=()=>{
+  const max=document.documentElement.scrollHeight-window.innerHeight;
+  progress.style.transform="scaleX("+ (max>0?window.scrollY/max:0) +")";
+  scrollQueued=false;
+ };
+ window.addEventListener("scroll",()=>{if(!scrollQueued){scrollQueued=true;requestAnimationFrame(updateProgress)}},{passive:true});
+ updateProgress();
+
+ if(hero&&!reduce&&finePointer){
+  hero.addEventListener("pointermove",event=>{
+   const r=hero.getBoundingClientRect(),x=(event.clientX-r.left)/r.width,y=(event.clientY-r.top)/r.height;
+   hero.style.setProperty("--spot-x",(x*100)+"%");
+   hero.style.setProperty("--spot-y",(y*100)+"%");
+   hero.style.setProperty("--hero-shift-x",((x-.5)*-12)+"px");
+   hero.style.setProperty("--hero-shift-y",((y-.5)*-10)+"px");
+  });
+  hero.addEventListener("pointerleave",()=>{
+   hero.style.setProperty("--spot-x","50%");
+   hero.style.setProperty("--spot-y","50%");
+   hero.style.setProperty("--hero-shift-x","0px");
+   hero.style.setProperty("--hero-shift-y","0px");
+  });
+ }
+
+ if(!reduce&&finePointer){
+  document.querySelectorAll(".pill,.submit,.google-auth,.back-top").forEach(control=>{
+   control.addEventListener("pointermove",event=>{
+    const r=control.getBoundingClientRect(),x=event.clientX-r.left-r.width/2,y=event.clientY-r.top-r.height/2;
+    control.style.setProperty("--mag-x",(x*.09)+"px");
+    control.style.setProperty("--mag-y",(y*.12)+"px");
+   });
+   control.addEventListener("pointerleave",()=>{
+    control.style.setProperty("--mag-x","0px");control.style.setProperty("--mag-y","0px");
+   });
+  });
+ }
+
+ const heroContent=document.querySelector(".hero-content");
+ if(heroContent&&!reduce){
+  heroContent.animate(
+   [{opacity:0,transform:"translate3d(0,30px,0)"},{opacity:1,transform:"translate3d(0,0,0)"}],
+   {duration:1050,delay:120,easing:"cubic-bezier(.16,.8,.25,1)",fill:"both"}
+  );
+ }
+ document.querySelectorAll(".hero-actions .pill,.hero-actions .text-link").forEach((el,i)=>{
+  if(reduce)return;
+  el.animate([{opacity:0,transform:"translateY(14px)"},{opacity:1,transform:"translateY(0)"}],
+   {duration:650,delay:650+i*130,easing:"cubic-bezier(.2,.8,.2,1)",fill:"both"});
+ });
+})();
+
 /* Milan Supabase integration: public event discovery, email/password accounts, saved events and registrations. */
 function setAuthMode(mode){
  document.querySelectorAll("[data-auth-mode]").forEach(b=>b.classList.toggle("active",b.dataset.authMode===mode));
