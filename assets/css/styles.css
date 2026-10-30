@@ -263,3 +263,7 @@ html,body{font-family:var(--font-body)}
 @media(prefers-reduced-motion:reduce){
  .category-card:hover .cat-cta,.text-btn:hover{transform:none}
 }
+
+/* Keep display emphasis inside the two-family type system */
+:root{--serif:'Space Grotesk',sans-serif}
+.hero h1 em,.section h2 em,.guest-inner h2 em,.modal h2 em{font-family:'Space Grotesk',sans-serif!important;font-style:italic;font-weight:600}
