@@ -53,3 +53,31 @@ document.getElementById("authGuest").addEventListener("click",browseAsGuest);
 document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("navlinks").classList.toggle("open"));
 document.querySelectorAll(".navlinks a").forEach(a=>a.addEventListener("click",()=>document.getElementById("navlinks").classList.remove("open")));
 renderEvents();
+
+
+/* Scroll reveals and pointer-based 3D card motion */
+(function enhanceMotion(){
+  const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealTargets=document.querySelectorAll('.intro > *, .section-head, .category-card, .event-card, .guest-inner > *, .footer-row > *');
+  revealTargets.forEach((el,index)=>{el.classList.add('reveal-item');if(el.classList.contains('category-card'))el.style.transitionDelay=(index%4)*65+'ms'});
+  if('IntersectionObserver' in window && !reduceMotion){
+    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target)}
+    }),{threshold:.12,rootMargin:'0px 0px -35px 0px'});
+    revealTargets.forEach(el=>observer.observe(el));
+  }else revealTargets.forEach(el=>el.classList.add('is-visible'));
+  if(reduceMotion || !window.matchMedia('(hover: hover) and (pointer: fine)').matches)return;
+  document.querySelectorAll('.category-card,.event-card').forEach(card=>{
+    card.addEventListener('pointermove',event=>{
+      const rect=card.getBoundingClientRect();
+      const x=(event.clientX-rect.left)/rect.width-.5;
+      const y=(event.clientY-rect.top)/rect.height-.5;
+      card.style.setProperty('--tilt-x',(-y*5).toFixed(2)+'deg');
+      card.style.setProperty('--tilt-y',(x*6).toFixed(2)+'deg');
+    });
+    card.addEventListener('pointerleave',()=>{
+      card.style.setProperty('--tilt-x','0deg');
+      card.style.setProperty('--tilt-y','0deg');
+    });
+  });
+})();
