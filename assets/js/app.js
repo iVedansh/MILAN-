@@ -109,7 +109,7 @@ function setAuthMode(mode){
 document.getElementById("googleAuth").addEventListener("click",async()=>{
  const status=document.getElementById("authStatus"),button=document.getElementById("googleAuth");
  button.disabled=true;status.textContent="Connecting to Google…";
- const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.origin,queryParams:{prompt:"select_account"}}});
+ const isLocalHost=["localhost","127.0.0.1"].includes(window.location.hostname);\n const redirectTo=isLocalHost?"https://milan-react-fc22.vercel.app/":window.location.origin;\n const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo,queryParams:{prompt:"select_account"}}});
  if(error){status.textContent=error.message;button.disabled=false;}
 });
 document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>setAuthMode(b.dataset.authMode)));
