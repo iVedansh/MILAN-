@@ -49,6 +49,19 @@ The website is connected to a dedicated Supabase project in Mumbai (ap-south-1).
 
 The frontend reads event data from Supabase. Event names, dates and venues remain sample placeholders until the official Milan schedule is supplied. Email confirmation behavior follows the Supabase Auth project settings.
 
+### Google sign-in setup
+
+The login dialog includes a **Continue with Google** button and calls Supabase Auth OAuth (`provider: google`). To enable real Google accounts, the Google OAuth provider must be configured with credentials owned by the project administrator; the website code cannot create those credentials.
+
+1. In Google Cloud Console, create an OAuth client with application type **Web application**.
+2. Add this as an authorized JavaScript origin: `https://milan-react-fc22.vercel.app`.
+3. Add this as an authorized redirect URI: `https://jaodrhdfgsotwaalvjuo.supabase.co/auth/v1/callback`.
+4. In Supabase Dashboard → Authentication → URL Configuration, allow the redirect URL `https://milan-react-fc22.vercel.app/**` (and your local development origin only while testing locally).
+5. In Supabase Dashboard → Authentication → Sign In / Providers → Google, enable Google and enter the Google OAuth Client ID and Client Secret. Save the settings.
+6. Keep the Client Secret in Supabase only. Never add it to GitHub, HTML, JavaScript, or Vercel public environment variables.
+
+After saving, test **Continue with Google** on the deployed site. Google consent-screen publishing / test-user restrictions are controlled in Google Cloud Console.
+
 ## Notes
 
 - Event photography is illustrative and loaded from Unsplash.
