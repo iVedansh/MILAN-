@@ -31,7 +31,7 @@ const grid=document.getElementById("eventGrid");
 function renderEvents(){
  const term=document.getElementById("searchInput").value.trim().toLowerCase();
  const shown=events.filter(e=>(activeCategory==="All"||e.category===activeCategory)&&[e.title,e.category,e.desc,e.venue].some(v=>v.toLowerCase().includes(term)));
- grid.innerHTML=shown.length?shown.map(e=>'<article class="event-card"><img class="event-img" src="'+categoryImages[e.category]+'" alt="'+e.category+' event artwork" loading="lazy"><div class="event-content"><div class="tag">'+e.category+' · MILAN 26</div><h3>'+e.title+'</h3><p>'+e.desc+'</p><div class="event-meta">◷ '+e.date+'<br>⌖ '+e.venue+'</div><button class="text-btn" data-details="'+e.id+'">Explore event ↗</button></div></article>').join(""):'<div class="empty"><strong>No events match that search.</strong><p>Try another keyword or category.</p><button class="pill gold" id="resetSearch">Clear filters</button></div>';
+ grid.innerHTML=shown.length?shown.map(e=>'<article class="event-card"><img class="event-img" src="'+categoryImages[e.category]+'" alt="'+e.category+' event artwork" loading="lazy"><div class="event-content"><div class="tag">'+e.category+' · MILAN 26</div><h3>'+e.title+'</h3><p>'+e.desc+'</p><div class="event-meta">◷ '+e.date+'<br>⌖ '+e.venue+'</div><button class="text-btn" data-details="'+e.id+'">Explore event ↗</button><button class="save-event" data-save="'+e.id+'" type="button">♡ Save event</button></div></article>').join(""):'<div class="empty"><strong>No events match that search.</strong><p>Try another keyword or category.</p><button class="pill gold" id="resetSearch">Clear filters</button></div>';
 }
 function setCategory(category){activeCategory=category;document.querySelectorAll(".filter").forEach(b=>{const active=b.dataset.category===category;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active))});renderEvents()}
 document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-category]");if(b)setCategory(b.dataset.category)});
@@ -51,7 +51,7 @@ document.getElementById("registrationForm").addEventListener("submit",async e=>{
  Object.entries(errors).forEach(([id,msg])=>document.getElementById(id).textContent=msg);
  if(Object.values(errors).some(Boolean))return;
  const submit=e.target.querySelector(".submit");submit.disabled=true;submit.textContent="Submitting…";
- const {error}=await supabaseClient.from("event_registrations").upsert({user_id:currentUser.id,event_id:selectedEvent.id,full_name:values.fullName,email:values.email,college:values.college,study_year:values.year},{onConflict:"user_id,event_id"});
+ const {error}=await supabaseClient.from("event_registrations").insert({user_id:currentUser.id,event_id:selectedEvent.id,full_name:values.fullName,email:values.email,college:values.college,study_year:values.year});
  const success=document.getElementById("successMessage");
  if(error){success.textContent=error.code==="23505"?"You are already registered for this event.":error.message;success.classList.add("show");submit.disabled=false;submit.textContent="Try again ↗";return;}
  success.textContent="Your interest has been saved to your Milan account.";success.classList.add("show");submit.textContent="Saved ✓";
@@ -62,7 +62,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelect
 function browseAsGuest(){document.getElementById("authModal").classList.remove("show");document.body.style.overflow="";const note=document.createElement("div");note.className="guest-toast";note.textContent="You're browsing Milan as a guest. Event discovery is open to everyone.";document.body.append(note);setTimeout(()=>note.remove(),4200)}
 document.getElementById("guestBtn").addEventListener("click",browseAsGuest);
 document.getElementById("guestBtnBottom").addEventListener("click",()=>{browseAsGuest();document.getElementById("categories").scrollIntoView({behavior:"smooth"})});
-document.getElementById("loginBtn").addEventListener("click",()=>openModal("authModal"));
+
 document.getElementById("authGuest").addEventListener("click",browseAsGuest);
 document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("navlinks").classList.toggle("open"));
 document.querySelectorAll(".navlinks a").forEach(a=>a.addEventListener("click",()=>document.getElementById("navlinks").classList.remove("open")));
