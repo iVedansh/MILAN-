@@ -32,8 +32,17 @@ function renderEvents(){
  const term=document.getElementById("searchInput").value.trim().toLowerCase();
  const shown=events.filter(e=>(activeCategory==="All"||e.category===activeCategory)&&[e.title,e.category,e.desc,e.venue].some(v=>v.toLowerCase().includes(term)));
  grid.innerHTML=shown.length?shown.map(e=>'<article class="event-card"><img class="event-img" src="'+categoryImages[e.category]+'" alt="'+e.category+' event artwork" loading="lazy"><div class="event-content"><div class="tag">'+e.category+' · MILAN 26</div><h3>'+e.title+'</h3><p>'+e.desc+'</p><div class="event-meta">◷ '+e.date+'<br>⌖ '+e.venue+'</div><button class="text-btn" data-details="'+e.id+'">Explore event ↗</button><button class="save-event" data-save="'+e.id+'" type="button">♡ Save event</button></div></article>').join(""):'<div class="empty"><strong>No events match that search.</strong><p>Try another keyword or category.</p><button class="pill gold" id="resetSearch">Clear filters</button></div>';
+ grid.querySelectorAll(".event-card").forEach((card,index)=>{card.style.setProperty("--card-index",index);card.classList.add("event-card-enter")});
 }
-function setCategory(category){activeCategory=category;document.querySelectorAll(".filter").forEach(b=>{const active=b.dataset.category===category;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active))});renderEvents()}
+let categorySwitchTimer;
+function setCategory(category){
+ if(category===activeCategory)return;
+ activeCategory=category;
+ document.querySelectorAll(".filter").forEach(b=>{const active=b.dataset.category===category;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active))});
+ grid.classList.add("is-switching");
+ clearTimeout(categorySwitchTimer);
+ categorySwitchTimer=window.setTimeout(()=>{renderEvents();grid.classList.remove("is-switching")},140);
+}
 document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-category]");if(b)setCategory(b.dataset.category)});
 document.getElementById("categoryGrid").addEventListener("click",e=>{const card=e.target.closest("[data-category]");if(!card)return;setCategory(card.dataset.category);document.getElementById("events").scrollIntoView({behavior:"smooth"})});
 document.getElementById("searchInput").addEventListener("input",renderEvents);
