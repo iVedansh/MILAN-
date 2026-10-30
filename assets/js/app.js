@@ -106,6 +106,12 @@ function setAuthMode(mode){
  document.getElementById("authStatus").textContent="";
  document.getElementById("authHeading").innerHTML=mode==="signup"?"Join the <em>feeling.</em>":"Welcome <em>back.</em>";
 }
+document.getElementById("googleAuth").addEventListener("click",async()=>{
+ const status=document.getElementById("authStatus"),button=document.getElementById("googleAuth");
+ button.disabled=true;status.textContent="Connecting to Google…";
+ const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.origin,queryParams:{prompt:"select_account"}}});
+ if(error){status.textContent=error.message;button.disabled=false;}
+});
 document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>setAuthMode(b.dataset.authMode)));
 document.getElementById("authForm").addEventListener("submit",async e=>{
  e.preventDefault();const mode=document.querySelector("[data-auth-mode].active")?.dataset.authMode||"signin";
