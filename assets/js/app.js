@@ -130,6 +130,19 @@ document.getElementById("loginBtn").addEventListener("click",async e=>{
  if(currentUser){e.preventDefault();await supabaseClient.auth.signOut();currentUser=null;updateAuthUI();return;}
  setAuthMode("signin");openModal("authModal");
 });
+function attachCardMotion(){
+ const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ document.querySelectorAll(".event-card").forEach(card=>{
+  card.classList.add("reveal-item","is-visible");
+  if(reduced||card.dataset.motionReady)return;
+  card.dataset.motionReady="true";
+  card.addEventListener("pointermove",event=>{
+   const rect=card.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width-.5,y=(event.clientY-rect.top)/rect.height-.5;
+   card.style.setProperty("--tilt-x",(-y*4).toFixed(2)+"deg");card.style.setProperty("--tilt-y",(x*5).toFixed(2)+"deg");
+  });
+  card.addEventListener("pointerleave",()=>{card.style.setProperty("--tilt-x","0deg");card.style.setProperty("--tilt-y","0deg");});
+ });
+}
 async function loadBackendEvents(){
  const {data,error}=await supabaseClient.from("events").select("id,title,description,schedule_label,venue_label,image_url,category_id,event_categories(name)").eq("is_published",true).order("id");
  if(error){console.error("Milan events could not be loaded:",error);return;}
