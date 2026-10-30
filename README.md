@@ -1,50 +1,49 @@
 # Milan '26 — Festival Website
 
-A colourful, responsive frontend for the Milan national-level cultural fest concept at SRMIST. Built for **DSA Tech Team Recruitment — Track B (Frontend Development)**.
+A responsive, image-led Milan festival discovery website for **DSA Tech Team Recruitment — Track B (Frontend Development)**.
 
-## Features
+## Track B scope
 
-- Festival landing page with navigation, introduction and featured visual identity
-- Eight sample events across Music, Dance, Drama, Fashion and Technical
-- Live keyword search and category filters
-- Event detail modal with date, time, venue and description
-- Registration form with client-side validation and success feedback
-- Responsive desktop and mobile layouts
-- Empty search state, modal dismissal, keyboard Escape support and mobile navigation
+- Homepage with Milan identity, navigation, hero, festival introduction and featured categories
+- Seven event categories based on the supplied Milan reference: Movies & Dramatics, Creative Arts, Music, Dance, Gaming, Quiz and Self Defence
+- Fourteen sample event entries across those categories
+- Keyword search and category filters, including category-card shortcuts
+- Event detail modal with category, description, schedule and venue fields
+- Registration form with client-side required-field and email validation, inline errors and success feedback
+- Guest browsing without an account
+- Responsive desktop/mobile layouts, mobile navigation, keyboard modal handling and empty search state
+- Organised HTML, CSS and JavaScript; GitHub Actions checks JavaScript syntax and required files
 
 ## Run locally
 
-This is a static frontend and does not require a build step or backend. Styles and interactions are organized in `assets/css/styles.css` and `assets/js/app.js`.
+This is a static frontend and does not require a build step.
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/iVedansh/MILAN-.git
    cd MILAN-
    ```
-2. Open `index.html` in a browser, or run a local static server:
+2. Open `index.html` in a browser, or run:
    ```bash
    npx serve .
    ```
 
-## Deploy on Vercel
+## Deployment
 
-1. Import this GitHub repository into Vercel.
-2. Choose **Other** as the framework preset.
-3. Leave the build command empty.
-4. Set the output directory to `.`.
-5. Deploy.
+The GitHub repository is connected to Vercel. Pushes to `main` trigger a new deployment.
 
-## Demo data
+## Sample content and assumptions
 
-Event content is fictional sample data stored in the `events` array in `assets/js/app.js`. Registration is a frontend demonstration only; it validates the form and shows a success state but does not send or persist participant data to a server.
+The category names and category descriptions follow the supplied Milan reference screenshots. The individual event names are illustrative sample content because the screenshots provide category names and event counts, not the official event-by-event schedule. Dates and venues are intentionally marked TBA/sample and must be replaced with official information before real registrations are opened.
 
-## Before a real launch
+## Backend and authentication
 
-- Replace sample event names, dates, venues and descriptions with the official Milan schedule.
-- Connect the registration form to an approved backend before collecting real participant details. The current form intentionally does not transmit or store personal data.
-- Confirm image usage rights and replace any temporary photography as needed.
+The current frontend supports guest browsing. The sign-in screen is a placeholder until a dedicated Supabase project is approved and configured. The registration form currently validates locally and does not send or persist personal information.
+
+When backend setup is approved, the intended implementation is Supabase Auth (email/password) and a Postgres events/registrations schema with row-level security. Never place a service-role key in browser code; only the publishable key belongs in frontend configuration.
 
 ## Notes
 
-- Images are loaded from Unsplash and Google Fonts are loaded remotely, so an internet connection is needed for those assets.
-- No real student information, credentials or secrets are included.
+- Event photography is illustrative and loaded from Unsplash.
+- No real student details or credentials are included.
+- Confirm official event data and image permissions before production registration.
