@@ -71,3 +71,12 @@ button:active,.pill:active,.text-btn:active{transform:scale(.97)}
 .modal-backdrop.show .modal{animation:modal-pop .34s cubic-bezier(.2,.8,.2,1) both}
 @keyframes modal-pop{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){.modal-backdrop.show .modal{animation:none}}
+
+/* Google OAuth entry point */
+.google-auth{width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;gap:12px;border:1px solid #cbbda9;border-radius:999px;background:#fffaf3;color:#211b22;font:700 14px inherit;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.google-auth:hover{background:#fff;color:#17131b;box-shadow:0 8px 22px #24160e18;transform:translateY(-2px)}
+.google-auth:disabled{opacity:.65;cursor:wait;transform:none}
+.google-auth svg{width:20px;height:20px;flex:none}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:#887b6c;font-size:9px;font-weight:800;letter-spacing:.15em}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;background:#d7c9b8;flex:1}
+@media(prefers-reduced-motion:reduce){.google-auth{transition:none}}
