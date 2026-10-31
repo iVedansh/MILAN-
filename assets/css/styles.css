@@ -374,3 +374,34 @@ html,body{font-family:var(--font-body)}
 @media(max-width:650px){
  .reveal-heading{transition-duration:.7s}
 }
+
+
+/* DESKTOP REVEAL SAFETY: keep content readable even if an observer misses a frame.
+   The visible state still receives the entrance animation when the observer activates it. */
+@media (min-width:651px) and (prefers-reduced-motion:no-preference){
+  .reveal-item{
+    opacity:1;
+    transform:none;
+  }
+  .reveal-item.is-visible{
+    animation:milan-desktop-rise .78s cubic-bezier(.16,.8,.25,1) both;
+  }
+  .reveal-heading{
+    clip-path:none;
+    transform:none;
+  }
+  .reveal-heading.is-visible{
+    animation:milan-desktop-heading .88s cubic-bezier(.16,.8,.25,1) both;
+  }
+  @keyframes milan-desktop-rise{
+    from{opacity:0;transform:translate3d(0,26px,0) scale(.985)}
+    to{opacity:1;transform:translate3d(0,0,0) scale(1)}
+  }
+  @keyframes milan-desktop-heading{
+    from{opacity:.25;clip-path:inset(0 0 100% 0);transform:translateY(18px)}
+    to{opacity:1;clip-path:inset(0 0 0 0);transform:translateY(0)}
+  }
+}
+@media (min-width:651px) and (prefers-reduced-motion:reduce){
+  .reveal-item,.reveal-heading{opacity:1!important;clip-path:none!important;transform:none!important;animation:none!important}
+}
