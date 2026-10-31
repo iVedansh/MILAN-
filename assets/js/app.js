@@ -84,9 +84,27 @@ document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",
 document.querySelectorAll(".modal-backdrop").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModal(m.id)}));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal-backdrop.show").forEach(m=>closeModal(m.id));if(e.key==="Tab"){const modal=document.querySelector(".modal-backdrop.show .modal");if(!modal)return;const items=[...modal.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent!==null);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 
-document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("navlinks").classList.toggle("open"));
+const mobileMenuButton=document.getElementById("menuBtn");
+const mobileNav=document.getElementById("navlinks");
+function closeMobileMenu(){
+ mobileNav.classList.remove("open");
+ mobileMenuButton.setAttribute("aria-expanded","false");
+ mobileMenuButton.setAttribute("aria-label","Open navigation menu");
+ mobileMenuButton.textContent="☰";
+}
+mobileMenuButton.addEventListener("click",()=>{
+ const opening=!mobileNav.classList.contains("open");
+ mobileNav.classList.toggle("open",opening);
+ mobileMenuButton.setAttribute("aria-expanded",String(opening));
+ mobileMenuButton.setAttribute("aria-label",opening?"Close navigation menu":"Open navigation menu");
+ mobileMenuButton.textContent=opening?"×":"☰";
+});
+document.addEventListener("click",event=>{
+ if(!mobileNav.contains(event.target)&&!mobileMenuButton.contains(event.target))closeMobileMenu();
+});
+window.addEventListener("resize",()=>{if(window.innerWidth>650)closeMobileMenu()},{passive:true});
 document.querySelectorAll(".navlinks a").forEach(a=>a.addEventListener("click",()=>{
- document.getElementById("navlinks").classList.remove("open");
+ closeMobileMenu();
  const target=document.querySelector(a.getAttribute("href"));
  if(target&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
   target.scrollIntoView({behavior:"smooth",block:"start"});
@@ -274,3 +292,24 @@ async function initMilanBackend(){
  }
 }
 initMilanBackend();
+
+
+/* Mobile-aware editorial motion: reveal headings as they enter the viewport. */
+(function editorialReveal(){
+ const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const headings=document.querySelectorAll(".intro h2,.section-head h2");
+ headings.forEach(el=>el.classList.add("reveal-heading"));
+ if(reduce||!("IntersectionObserver" in window)){
+  headings.forEach(el=>el.classList.add("is-visible"));
+  return;
+ }
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+   if(entry.isIntersecting){
+    entry.target.classList.add("is-visible");
+    observer.unobserve(entry.target);
+   }
+  });
+ },{threshold:.25,rootMargin:"0px 0px -30px 0px"});
+ headings.forEach(el=>observer.observe(el));
+})();
