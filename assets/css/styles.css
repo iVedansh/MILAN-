@@ -405,3 +405,66 @@ html,body{font-family:var(--font-body)}
 @media (min-width:651px) and (prefers-reduced-motion:reduce){
   .reveal-item,.reveal-heading{opacity:1!important;clip-path:none!important;transform:none!important;animation:none!important}
 }
+
+
+/* MOBILE POLISH PASS — tighter rhythm, compact controls and balanced footer */
+@media (max-width:650px){
+  *,*::before,*::after{box-sizing:border-box}
+  .hero-actions{display:flex;flex-direction:column;align-items:flex-start;justify-items:initial;gap:14px}
+  .hero-actions .pill.gold{
+    display:inline-flex;width:auto;max-width:100%;min-height:46px;
+    padding:11px 18px;font-size:13px;line-height:1.2;white-space:nowrap;
+  }
+  .hero-actions .text-link{font-size:12px;line-height:1.4}
+  .intro{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding-block:34px 38px}
+  .intro>div{min-width:0}
+  .intro .eyebrow{margin:0;font-size:11px;line-height:1.4}
+  .intro h2{display:block;max-width:100%;font-size:clamp(32px,8.5vw,40px);line-height:1.04;margin:9px 0 0}
+  .intro p{max-width:58ch;margin:0;font-size:14px;line-height:1.65}
+  .categories{padding-block:36px 42px}
+  .categories .section-head{gap:10px;margin-bottom:18px}
+  .categories .section-head h2{max-width:100%;font-size:clamp(32px,8.5vw,40px);line-height:1.05;margin:9px 0 0}
+  .categories .section-head>p{margin:0;font-size:13px;line-height:1.5}
+  .category-grid{margin-top:0}
+  .events-section{padding-block:38px}
+  .events-section .section-head{gap:10px;margin-bottom:18px}
+  .events-section .section-head h2{max-width:100%;margin:9px 0 0;font-size:clamp(32px,8.5vw,40px)}
+  .events-intro{margin:0;font-size:13px;line-height:1.55}
+  .discovery-tools{width:100%;max-width:100%;gap:10px;margin:0 0 18px}
+  .discovery-tools .searchbox{
+    display:flex;width:100%;max-width:100%;height:50px;min-height:50px;
+    padding:0 13px;gap:10px;overflow:hidden;align-items:center;
+  }
+  .discovery-tools .searchbox span{flex:0 0 auto;font-size:20px;line-height:1}
+  .discovery-tools .searchbox input{
+    display:block;min-width:0;width:100%;height:100%;padding:0!important;
+    font-size:14px;line-height:1.2;
+  }
+  .discovery-tools .filters{width:100%;max-width:100%;gap:7px;padding:2px 2px 9px}
+  .filters .filter{min-height:36px;padding:8px 11px;font-size:10px}
+  .footer{padding:34px 0 28px}
+  .footer-row{width:calc(100% - 36px);margin-inline:auto;align-items:center;text-align:center;gap:16px}
+  .footer-brand{justify-content:center;width:100%}
+  .footer-row>div:nth-child(2){width:100%;max-width:42ch!important;text-align:center;margin-inline:auto}
+  .footer-row>div:nth-child(2) .eyebrow{line-height:1.5;letter-spacing:.1em}
+  .footer-row>div:nth-child(2) p{font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+  .footer-row .foot-note{font-size:11px!important}
+  .back-top{align-self:center;display:inline-flex;justify-content:center;padding:10px 14px;margin-top:2px}
+  /* Never leave mobile headings hidden if an observer callback is delayed or missed. */
+  .reveal-heading{clip-path:none;transform:none;opacity:1}
+  .reveal-heading.is-visible{animation:milan-mobile-heading .72s cubic-bezier(.16,.8,.25,1) both}
+  .reveal-item{opacity:1;transform:none}
+  .reveal-item.is-visible{animation:milan-mobile-rise .65s cubic-bezier(.16,.8,.25,1) both}
+  @keyframes milan-mobile-heading{
+    from{opacity:.25;clip-path:inset(0 0 100% 0);transform:translateY(12px)}
+    to{opacity:1;clip-path:inset(0 0 0 0);transform:translateY(0)}
+  }
+  @keyframes milan-mobile-rise{
+    from{opacity:0;transform:translateY(16px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+}
+@media(max-width:370px){
+  .hero-actions .pill.gold{padding-inline:14px;font-size:12px}
+  .intro h2,.categories .section-head h2,.events-section .section-head h2{font-size:32px}
+}
