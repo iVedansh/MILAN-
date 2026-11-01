@@ -468,3 +468,15 @@ html,body{font-family:var(--font-body)}
   .hero-actions .pill.gold{padding-inline:14px;font-size:12px}
   .intro h2,.categories .section-head h2,.events-section .section-head h2{font-size:32px}
 }
+
+
+/* MOBILE HERO BACKDROP SCALE — bring the celebration artwork closer to desktop framing */
+@media (max-width:650px){
+  .hero{
+    background-size:auto 118%;
+    background-position:54% center;
+  }
+}
+@media (max-width:370px){
+  .hero{background-size:auto 112%;background-position:52% center}
+}
