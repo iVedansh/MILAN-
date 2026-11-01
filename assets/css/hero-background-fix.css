@@ -1,0 +1,22 @@
+/* MILAN hero background alignment fix
+   Keep the fireworks artwork filling the full hero without the oversized
+   mobile crop that pushed the focal area toward the left. */
+.hero {
+  background-size: cover !important;
+  background-position: 58% 45% !important;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 650px) {
+  .hero {
+    background-size: cover !important;
+    background-position: 60% center !important;
+  }
+}
+
+@media (max-width: 370px) {
+  .hero {
+    background-size: cover !important;
+    background-position: 58% center !important;
+  }
+}
