@@ -479,16 +479,23 @@ html,body{font-family:var(--font-body)}
 }
 
 
-/* FINAL HERO FIREWORKS ALIGNMENT — override all earlier mobile crop rules */
+/* HERO FIREWORKS — restore natural cover on desktop and enlarge/reframe on mobile */
 body .hero{
   background-image:url('https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?auto=format&fit=crop&w=2200&q=90') !important;
   background-repeat:no-repeat !important;
-  background-size:100% 100% !important;
-  background-position:center center !important;
+  background-size:cover !important;
+  background-position:center 42% !important;
 }
-@media(max-width:650px){
+@media (max-width:650px){
   body .hero{
-    background-size:100% 100% !important;
-    background-position:center center !important;
+    /* Larger artwork, shifted toward the right so fireworks span the card */
+    background-size:auto 165% !important;
+    background-position:68% 46% !important;
+  }
+}
+@media (max-width:370px){
+  body .hero{
+    background-size:auto 155% !important;
+    background-position:65% 46% !important;
   }
 }
