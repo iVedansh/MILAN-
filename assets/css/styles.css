@@ -470,13 +470,10 @@ html,body{font-family:var(--font-body)}
 }
 
 
-/* MOBILE HERO BACKDROP SCALE — bring the celebration artwork closer to desktop framing */
+/* MOBILE HERO BACKDROP SCALE — stronger zoom for the fireworks artwork */
 @media (max-width:650px){
-  .hero{
-    background-size:auto 118%;
-    background-position:54% center;
-  }
+  .hero{background-size:auto 148% !important;background-position:54% 44% !important;}
 }
 @media (max-width:370px){
-  .hero{background-size:auto 112%;background-position:52% center}
+  .hero{background-size:auto 138% !important;background-position:52% 44% !important;}
 }
