@@ -477,3 +477,18 @@ html,body{font-family:var(--font-body)}
 @media (max-width:370px){
   .hero{background-size:auto 138% !important;background-position:52% 44% !important;}
 }
+
+
+/* FINAL HERO FIREWORKS ALIGNMENT — override all earlier mobile crop rules */
+body .hero{
+  background-image:url('https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?auto=format&fit=crop&w=2200&q=90') !important;
+  background-repeat:no-repeat !important;
+  background-size:100% 100% !important;
+  background-position:center center !important;
+}
+@media(max-width:650px){
+  body .hero{
+    background-size:100% 100% !important;
+    background-position:center center !important;
+  }
+}
