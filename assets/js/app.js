@@ -240,13 +240,28 @@ document.getElementById("authForm").addEventListener("submit",async e=>{
 });
 function updateAuthUI(){
  const button=document.getElementById("loginBtn");
- if(currentUser){button.textContent="Sign out ↗";button.setAttribute("aria-label","Sign out");}
- else{button.textContent="Sign in ↗";button.setAttribute("aria-label","Sign in");}
+ const menuSignOut=document.getElementById("menuSignOut");
+ if(currentUser){
+  button.textContent="Sign out ↗";button.setAttribute("aria-label","Sign out");
+  menuSignOut.hidden=false;
+ }else{
+  button.textContent="Sign in ↗";button.setAttribute("aria-label","Sign in");
+  menuSignOut.hidden=true;
+ }
+}
+async function signOutMilan(){
+ const {error}=await supabaseClient.auth.signOut();
+ if(error){showToast("Could not sign out. Please try again.");return;}
+ currentUser=null;updateAuthUI();closeMobileMenu();
 }
 document.getElementById("loginBtn").addEventListener("click",async e=>{
- if(currentUser){e.preventDefault();await supabaseClient.auth.signOut();currentUser=null;updateAuthUI();return;}
+ if(currentUser){
+  if(window.matchMedia("(max-width:650px)").matches){e.preventDefault();return;}
+  e.preventDefault();await signOutMilan();return;
+ }
  setAuthMode("signin");openModal("authModal");
 });
+document.getElementById("menuSignOut").addEventListener("click",signOutMilan);
 function attachCardMotion(){
  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
  document.querySelectorAll(".event-card").forEach(card=>{
