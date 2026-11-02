@@ -479,7 +479,7 @@ html,body{font-family:var(--font-body)}
 }
 
 
-/* HERO FIREWORKS — restore natural cover on desktop and enlarge/reframe on mobile */
+/* HERO FIREWORKS — larger focal artwork, centered across the full mobile hero */
 body .hero{
   background-image:url('https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?auto=format&fit=crop&w=2200&q=90') !important;
   background-repeat:no-repeat !important;
@@ -488,14 +488,13 @@ body .hero{
 }
 @media (max-width:650px){
   body .hero{
-    /* Larger artwork, shifted toward the right so fireworks span the card */
-    background-size:auto 165% !important;
-    background-position:68% 46% !important;
+    background-size:auto 190% !important;
+    background-position:50% 46% !important;
   }
 }
 @media (max-width:370px){
   body .hero{
-    background-size:auto 155% !important;
-    background-position:65% 46% !important;
+    background-size:auto 178% !important;
+    background-position:50% 46% !important;
   }
 }
