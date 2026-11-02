@@ -493,3 +493,24 @@ html,body{font-family:var(--font-body)}
     background-position:50% 48% !important;
   }
 }
+
+
+/* MOBILE NAV ACCOUNT ACTION + FINAL HERO ARTWORK FRAMING */
+.menu-signout{display:none}
+@media(max-width:650px){
+  .nav-actions #loginBtn[aria-label="Sign out"]{display:none}
+  .navlinks.open .menu-signout:not([hidden]){
+    display:block;width:100%;text-align:left;border:0;border-top:1px solid #17131b22;
+    padding:16px 0 0;margin-top:2px;background:transparent;color:#a44a2c;
+    font:800 13px var(--sans);letter-spacing:.08em;cursor:pointer
+  }
+  .navlinks.open .menu-signout:not([hidden]):active{opacity:.7}
+  body .hero{
+    background-size:210% auto !important;
+    background-position:50% 48% !important;
+    background-repeat:no-repeat !important;
+  }
+}
+@media(max-width:370px){
+  body .hero{background-size:195% auto !important;background-position:50% 48% !important}
+}
